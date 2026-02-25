@@ -8,9 +8,9 @@ _prompt_asciiship_vimode() {
 }
 
 if (( ! ${+functions[_prompt_asciiship_keymap_select]} )); then
-  functions[_prompt_asciiship_keymap_select]=$'zle reset-prompt
-zle -R
-'${widgets[zle-keymap-select]#user:}
+  functions[_prompt_asciiship_keymap_select]=${widgets[zle-keymap-select]#user:}'
+zle reset-prompt
+zle -R'
   zle -N zle-keymap-select _prompt_asciiship_keymap_select
 fi
 
@@ -31,14 +31,14 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:branch' format '%b'
   zstyle ':zim:git-info:commit' format 'HEAD %F{green}(%c)'
   zstyle ':zim:git-info:action' format ' %F{yellow}(${(U):-%s})'
-  zstyle ':zim:git-info:stashed' format '\\\$'
+  zstyle ':zim:git-info:stashed' format '\$'
   zstyle ':zim:git-info:unindexed' format '!'
   zstyle ':zim:git-info:indexed' format '+'
   zstyle ':zim:git-info:ahead' format '>'
   zstyle ':zim:git-info:behind' format '<'
   zstyle ':zim:git-info:keys' format \
       'status' '%S%I%i%A%B' \
-      'prompt' ' on %%B%F{magenta}%b%c%s${(e)git_info[status]:+" %F{red}[${(e)git_info[status]}]"}%f%%b'
+      'prompt' ' on %%B%F{magenta}%b%c%s${git_info[status]:+" %F{red}[${(e)git_info[status]}]"}%f%%b'
   add-zsh-hook precmd git-info
 fi
 

@@ -35,8 +35,8 @@ What does it show?
 Requirements
 ------------
 
-Requires Zim's [git-info] module to show git information, and [duration-info]
-module to show the last command duration.
+Requires Zim Framework's [git-info] module to show git information, and
+[duration-info] module to show the last command duration.
 
 [Spaceship]: https://spaceship-prompt.sh/
 [Starship]: https://starship.rs/
