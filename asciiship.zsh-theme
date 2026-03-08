@@ -19,12 +19,6 @@ typeset -g VIRTUAL_ENV_DISABLE_PROMPT=1
 setopt nopromptbang prompt{cr,percent,sp,subst}
 
 autoload -Uz add-zsh-hook
-# Depends on duration-info module to show last command duration
-if (( ${+functions[duration-info-preexec]} && ${+functions[duration-info-precmd]} )); then
-  zstyle ':zim:duration-info' format ' took %B%F{yellow}%d%f%b'
-  add-zsh-hook preexec duration-info-preexec
-  add-zsh-hook precmd duration-info-precmd
-fi
 # Depends on git-info module to show git information
 typeset -gA git_info
 if (( ${+functions[git-info]} )); then
@@ -38,11 +32,11 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:behind' format '<'
   zstyle ':zim:git-info:keys' format \
       'status' '%S%I%i%A%B' \
-      'prompt' ' on %%B%F{magenta}%b%c%s${git_info[status]:+" %F{red}[${(e)git_info[status]}]"}%f%%b'
+      'prompt' ' %%B%F{magenta}git:%b%c%s${git_info[status]:+"%F{red}[${(e)git_info[status]}]"}%f%%b'
   add-zsh-hook precmd git-info
 fi
 
 PS1='
-%(!.%B%F{red}%n%f%b in .${SSH_TTY:+"%B%F{yellow}%n%f%b in "})${SSH_TTY:+"%B%F{green}%m%f%b in "}%B%F{cyan}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" via %B%F{yellow}${VIRTUAL_ENV:t}%f%b"}${duration_info}
-%B%(1j.%F{blue}*%f .)%(?.%F{green}.%F{red}%? )$(_prompt_asciiship_vimode)%f%b '
+%B%(!.%F{red}.%F{yellow})%n%f%b@%B%F{green}%m%f %F{cyan}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
+%B%(1j.%F{blue}*%f .)%(?..%F{red}%? )%F{green}$(_prompt_asciiship_vimode)%f%b '
 unset RPS1
