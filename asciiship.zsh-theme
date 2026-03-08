@@ -32,7 +32,7 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:behind' format '<'
   zstyle ':zim:git-info:keys' format \
       'status' '%S%I%i%A%B' \
-      'prompt' ' %%B%F{magenta}git:%b%c%s${git_info[status]:+"%F{red}[${(e)git_info[status]}]"}%f%%b'
+      'prompt' ' %%B%F{magenta}git:%b%c%s${git_info[status]:+"%f[${(e)git_info[status]}]"}%%b'
   add-zsh-hook precmd git-info
 fi
 
