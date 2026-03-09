@@ -37,6 +37,6 @@ if (( ${+functions[git-info]} )); then
 fi
 
 PS1='
-%B%(!.%F{red}.%F{yellow})%n%f%b@%B%F{green}%m%f %F{cyan}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
+%B%(!.%F{red}.%F{yellow})%n%f%b@%B${SSH_TTY:+"%F{cyan}"}${SSH_TTY:-"%F{green}"}%m%f %F{blue}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
 %B%(1j.%F{blue}*%f .)%(?..%F{red}%? )%F{green}$(_prompt_asciiship_vimode)%f%b '
 unset RPS1
