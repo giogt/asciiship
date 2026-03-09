@@ -36,7 +36,24 @@ if (( ${+functions[git-info]} )); then
   add-zsh-hook precmd git-info
 fi
 
+# Compute which color to use for the username prompt fragment
+if [[ $(id -u) -eq 0 ]]; then
+  # current user is root
+  _user_color='red'
+else
+  _user_color='yellow'
+fi
+
+# Compute which color to use for the hostname prompt fragment
+if (( ${+SSH_TTY} )); then
+  # we are currently on a remote machine via SSH
+  _host_color='cyan'
+else
+  _host_color='green'
+fi
+_prompt_hostname='%B%F{${_host_color}}%m%f'
+
 PS1='
-%B%(!.%F{red}.%F{yellow})%n%f%b@%B${SSH_TTY:+"%F{cyan}"}${SSH_TTY:-"%F{green}"}%m%f %F{blue}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
+%B%F{${_user_color}}%n%f%b@%B%F{${_host_color}}%m%f %F{blue}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
 %B%(1j.%F{blue}*%f .)%(?..%F{red}%? )%F{green}$(_prompt_asciiship_vimode)%f%b '
 unset RPS1
