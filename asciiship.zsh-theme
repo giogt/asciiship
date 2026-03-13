@@ -45,7 +45,7 @@ else
 fi
 
 # Compute which color to use for the hostname prompt fragment
-if (( ${+SSH_TTY} )); then
+if (( ${+SSH_TTY} || ${+SSH_CONNECTION} )); then
   # we are currently on a remote machine via SSH
   _host_color='cyan'
 else
