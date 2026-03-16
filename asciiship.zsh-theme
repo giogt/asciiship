@@ -2,8 +2,8 @@
 
 _prompt_asciiship_vimode() {
   case ${KEYMAP} in
-    vicmd) print -n '%S%#%s' ;;
-    *) print -n '%#' ;;
+    vicmd) print -n '%S❯%s' ;;
+    *) print -n '❯' ;;
   esac
 }
 
@@ -32,28 +32,27 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:behind' format '<'
   zstyle ':zim:git-info:keys' format \
       'status' '%S%I%i%A%B' \
-      'prompt' ' %%B%F{magenta}git:%b%c%s${git_info[status]:+"%f[${(e)git_info[status]}]"}%%b'
+      'prompt' ' %F{magenta}git:%%B%b%c%s${git_info[status]:+"%f[${(e)git_info[status]}]"%%b}'
   add-zsh-hook precmd git-info
 fi
 
-# Compute which color to use for the username prompt fragment
-if [[ $(id -u) -eq 0 ]]; then
-  # current user is root
-  _user_color='red'
-else
-  _user_color='yellow'
-fi
-
-# Compute which color to use for the hostname prompt fragment
-if (( ${+SSH_TTY} || ${+SSH_CONNECTION} )); then
+# Construct user@host fragment of the prompt
+if [[ -v SSH_TTY || -v SSH_CONNECTION ]]; then
   # we are currently on a remote machine via SSH
-  _host_color='cyan'
-else
-  _host_color='green'
+  _user_host_fragment="%B%F{yellow}%n@%m%f%b"
+elif [[ -v DEFAULT_UID && $(id -u) -eq DEFAULT_UID ]]; then
+  # current user is default user
+  #  => user@host fragment is empty
+  _user_host_fragment=""
+elif [[ $(id -u) -eq 0 ]]; then
+  # current user is root
+  _user_host_fragment="%B%F{red}%n@%m%f%b"
+else 
+  # current user is neither root, nor the default user
+  _user_host_fragment="%F{magenta}%n@%m%f"
 fi
-_prompt_hostname='%B%F{${_host_color}}%m%f'
 
 PS1='
-%B%F{${_user_color}}%n%f%b@%B%F{${_host_color}}%m%f %F{blue}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
+${_user_host_fragment}%B%F{blue}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" %B%F{yellow}venv:${VIRTUAL_ENV:t}%f%b"}
 %B%(1j.%F{blue}*%f .)%(?..%F{red}%? )%F{green}$(_prompt_asciiship_vimode)%f%b '
 unset RPS1
