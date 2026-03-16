@@ -39,17 +39,17 @@ fi
 # Construct user@host fragment of the prompt
 if [[ -v SSH_TTY || -v SSH_CONNECTION ]]; then
   # we are currently on a remote machine via SSH
-  _user_host_fragment="%B%F{yellow}%n@%m%f%b"
+  _user_host_fragment="%B%F{yellow}%n@%m%f%b "
 elif [[ -v DEFAULT_UID && $(id -u) -eq DEFAULT_UID ]]; then
   # current user is default user
   #  => user@host fragment is empty
   _user_host_fragment=""
 elif [[ $(id -u) -eq 0 ]]; then
   # current user is root
-  _user_host_fragment="%B%F{red}%n@%m%f%b"
+  _user_host_fragment="%B%F{red}%n@%m%f%b "
 else 
   # current user is neither root, nor the default user
-  _user_host_fragment="%F{magenta}%n@%m%f"
+  _user_host_fragment="%F{magenta}%n@%m%f "
 fi
 
 PS1='
